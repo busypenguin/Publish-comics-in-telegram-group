@@ -16,7 +16,9 @@ def download_image(url, folder_path):
 
 
 def get_random_url_response():
-    random_num_comics = random.randint(1, 2600)
+    min_comics_value = 1
+    max_comics_value = 2600
+    random_num_comics = random.randint(min_comics_value, max_comics_value)
     url = f"https://xkcd.com/{random_num_comics}/info.0.json"
     response = requests.get(url)
     response_json = response.json()
