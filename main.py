@@ -22,17 +22,17 @@ response = requests.get(full_url)
 response_json = response.json()
 img_url = response_json['img']
 
+if __name__ == '__main__':
+    env = Env()
+    env.read_env()
+    telegram_bot_token = env.str('TELEGRAM_BOT_TOKEN')
+    tg_chat_id = env.str('TG_CHAT_ID')
+    bot = telegram.Bot(token=telegram_bot_token)
 
-env = Env()
-env.read_env()
-telegram_bot_token = env.str('TELEGRAM_BOT_TOKEN')
-tg_chat_id = env.str('TG_CHAT_ID')
-bot = telegram.Bot(token=telegram_bot_token)
+    os.makedirs('images/', exist_ok=True)
 
-os.makedirs('images/', exist_ok=True)
-
-filepath = download_image(img_url, 'images/')
-with open(filepath, 'rb') as photo:
-    bot.send_message(tg_chat_id, response_json['alt'])
-    bot.send_photo(tg_chat_id,  photo)
-    os.remove(filepath)
+    filepath = download_image(img_url, 'images/')
+    with open(filepath, 'rb') as photo:
+        bot.send_message(tg_chat_id, response_json['alt'])
+        bot.send_photo(tg_chat_id,  photo)
+        os.remove(filepath)
