@@ -2,6 +2,7 @@ import requests
 import telegram
 from environs import Env
 import os
+import os.path
 import random
 
 
@@ -32,9 +33,10 @@ if __name__ == '__main__':
     tg_chat_id = env.str('TG_CHAT_ID')
     bot = telegram.Bot(token=telegram_bot_token)
 
-    os.makedirs('images/', exist_ok=True)
+    folder = os.path.join('images/')
+    os.makedirs(folder, exist_ok=True)
 
-    filepath = download_image(get_random_url_response()['img'], 'images/')
+    filepath = download_image(get_random_url_response()['img'], folder)
     with open(filepath, 'rb') as photo:
         bot.send_message(tg_chat_id, get_random_url_response()['alt'])
         bot.send_photo(tg_chat_id,  photo)
