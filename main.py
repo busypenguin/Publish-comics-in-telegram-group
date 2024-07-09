@@ -22,8 +22,8 @@ def get_random_url_response():
     random_num_comics = random.randint(min_comics_value, max_comics_value)
     url = f"https://xkcd.com/{random_num_comics}/info.0.json"
     response = requests.get(url)
-    response_json = response.json()
-    return response_json
+    comics = response.json()
+    return comics
 
 
 if __name__ == '__main__':
