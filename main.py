@@ -15,12 +15,13 @@ def download_image(url, folder_path):
     return filepath
 
 
-random_num_comics = random.randint(1, 2600)
-print(random_num_comics)
-full_url = f"https://xkcd.com/{random_num_comics}/info.0.json"
-response = requests.get(full_url)
-response_json = response.json()
-img_url = response_json['img']
+def get_random_url_response():
+    random_num_comics = random.randint(1, 2600)
+    url = f"https://xkcd.com/{random_num_comics}/info.0.json"
+    response = requests.get(url)
+    response_json = response.json()
+    return response_json
+
 
 if __name__ == '__main__':
     env = Env()
@@ -31,8 +32,8 @@ if __name__ == '__main__':
 
     os.makedirs('images/', exist_ok=True)
 
-    filepath = download_image(img_url, 'images/')
+    filepath = download_image(get_random_url_response()['img'], 'images/')
     with open(filepath, 'rb') as photo:
-        bot.send_message(tg_chat_id, response_json['alt'])
+        bot.send_message(tg_chat_id, get_random_url_response()['alt'])
         bot.send_photo(tg_chat_id,  photo)
         os.remove(filepath)
