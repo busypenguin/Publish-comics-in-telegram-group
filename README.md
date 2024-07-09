@@ -18,7 +18,7 @@ TG_CHAT_ID это путь к вашей группе в телеграме.
 
 Например:
 
-```TELEGRAM_BOT_TOKEN = 087979801:AAHtAqqKhDexAHU1Hpaf3ukijguPBKA```
+```TELEGRAM_BOT_TOKEN=87979801:AAHtAqqKhDexAHU1Hpaf3ukijguPBKA```
 
 ### Запуск
 
