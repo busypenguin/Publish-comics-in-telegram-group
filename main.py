@@ -3,11 +3,12 @@ import telegram
 from environs import Env
 import os
 import os.path
+from urllib.parse import urlparse
 import random
 
 
 def download_image(url, folder_path):
-    filename = url.split("/")[-1]
+    filename = os.path.split(url)[1]
     response = requests.get(url)
     response.raise_for_status()
     filepath = f'{folder_path}{filename}'
