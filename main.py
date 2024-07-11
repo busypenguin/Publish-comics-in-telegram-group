@@ -3,8 +3,8 @@ import telegram
 from environs import Env
 import os
 import os.path
-from urllib.parse import urlparse
 import random
+import shutil
 
 
 def download_image(url, folder_path):
@@ -17,14 +17,15 @@ def download_image(url, folder_path):
     return filepath
 
 
-def get_random_url_response():
+def get_random_comic():
     min_comics_value = 1
     max_comics_value = 2600
     random_num_comics = random.randint(min_comics_value, max_comics_value)
     url = f"https://xkcd.com/{random_num_comics}/info.0.json"
     response = requests.get(url)
-    comics = response.json()
-    return comics
+    response.raise_for_status()
+    comic = response.json()
+    return comic
 
 
 if __name__ == '__main__':
@@ -36,12 +37,17 @@ if __name__ == '__main__':
 
     folder = os.path.join('images/')
     os.makedirs(folder, exist_ok=True)
-    filepath = download_image(get_random_url_response()['img'], folder)
+
     try:
+        filepath = download_image(get_random_comic()['img'], folder)
         with open(filepath, 'rb') as photo:
-            bot.send_message(tg_chat_id, get_random_url_response()['alt'])
+            bot.send_message(tg_chat_id, get_random_comic()['alt'])
             bot.send_photo(tg_chat_id,  photo)
-    except Exception as err:
-        print(f"Unexpected {err=}, {type(err)=}")
+    except requests.exceptions.HTTPError:
+        print('Данная ссылка не работает')
+    except requests.exceptions.JSONDecodeError:
+        print('Несуществующая ссылка')
+    except requests.exceptions.ConnectionError:
+        print('Отсутствует подключение к интернету')
     finally:
-        os.remove(filepath)
+        shutil.rmtree(folder)
